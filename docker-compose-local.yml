@@ -1,0 +1,23 @@
+version: "3.8"
+services:
+  creditmarket-redis:
+    container_name: creditmarket-redis
+    build:
+      dockerfile: Dockerfile
+      context: ./redis
+    image: ryusunny/creditmarket-redis
+    ports:
+      - "6379:6379"
+  creditmarket-database:
+    container_name: creditmarket-database
+    build:
+      dockerfile: Dockerfile
+      context: ./database
+    image: ryusunny/creditmarket-database
+    environment:
+      MYSQL_DATABASE: creditmarket
+      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+    volumes:
+      - ./database/config:/etc/mysql/conf.d
+    ports:
+      - "3306:3306"
