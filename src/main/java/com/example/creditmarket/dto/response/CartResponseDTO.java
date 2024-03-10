@@ -24,10 +24,10 @@ public class CartResponseDTO {
     }
 
     @Builder
-    public CartResponseDTO(EntityCart cart) {
-        this.cartId = cart.getCartId();
-        this.companyName = cart.getFproduct().getFproduct_company_name();
-        this.productName = cart.getFproduct().getFproduct_name();
-        this.productId = cart.getFproduct().getFproduct_id();
+    public CartResponseDTO(EntityCart entityCart) {
+        this.cartId = entityCart.getCartId();
+        this.companyName = entityCart.getFproduct().getFproduct_company_name();
+        this.productName = entityCart.getFproduct().getFproduct_name();
+        this.productId = entityCart.getFproduct().getFproduct_id();
     }
 }

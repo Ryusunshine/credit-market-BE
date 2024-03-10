@@ -1,7 +1,5 @@
 package com.example.creditmarket.openAPI;
 
-
-
 import com.example.creditmarket.entity.EntityFProduct;
 import com.example.creditmarket.entity.EntityOption;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +30,7 @@ public class CrawlingService {
     private final String creditLoanProductsSearch = "creditLoanProductsSearch"; //개인신용대출
 
 
-    @Value("${open.api_key}")
+    @Value("${open.api.key}")
     private String accessKey;
 
     ArrayList<String> topFinGrpNoList = new ArrayList<>(Arrays.asList("020000", "030200", "030300", "050000", "060000"));
@@ -47,12 +45,9 @@ public class CrawlingService {
 
     public String callAPI(String topFinGrpNo) throws IOException, ParseException {
         StringBuilder result = new StringBuilder();
-        String urlStr = "http://finlife.fss.or.kr/finlifeapi/"+
-                "creditLoanProductsSearch" + //개인신용대출
-                ".json?" +
-                "auth=" + accessKey +
-                "&topFinGrpNo=" + topFinGrpNo +
-                "&pageNo=" + pageNo;
+        String urlStr = "https://finlife.fss.or.kr/finlifeapi/creditLoanProductsSearch.json?auth="
+                +accessKey
+                +"&topFinGrpNo=050000&pageNo=1";
         URL url = new URL(urlStr);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         urlConnection.setRequestMethod("GET");
@@ -130,10 +125,23 @@ public class CrawlingService {
 
     public void parsingJson(String json) throws ParseException {
         JSONParser jsonParser = new JSONParser();
+        System.out.println("sososoossosjosnsonsons" + json);
         JSONObject jsonObject = (JSONObject) jsonParser.parse(json);
+        System.out.println("JSON Object: " + jsonObject);
         JSONObject jsonResult = (JSONObject) jsonObject.get("result");
-        JSONArray jsonBaseList = (JSONArray) jsonResult.get("baseList");
-        JSONArray jsonOptionList = (JSONArray) jsonResult.get("optionList");
+
+        if (jsonResult == null) {
+            System.out.println("nullllll");
+        }
+            JSONArray jsonBaseList = (JSONArray) jsonResult.get("baseList");
+            JSONArray jsonOptionList = (JSONArray) jsonResult.get("optionList");
+
+            // Log the contents of the arrays
+            System.out.println("Base List: " + jsonBaseList);
+            System.out.println("Option List: " + jsonOptionList);
+
+            // Your existing code for processing jsonBaseList and jsonOptionList
+
 
         for (int i = 0; i < jsonBaseList.size(); i++) {
 //            for (int i = 0; i < 2; i++) {

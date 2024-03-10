@@ -43,12 +43,12 @@ public class CartServiceImpl implements CartService {
             return "isDupl";
         }
 
-        EntityCart cart = EntityCart.builder()
+        EntityCart entityCart = EntityCart.builder()
                 .user(user)
                 .fproduct(fProduct)
                 .build();
 
-        cartRepository.save(cart);
+        cartRepository.save(entityCart);
 
         return "success";
     }
@@ -58,9 +58,9 @@ public class CartServiceImpl implements CartService {
         EntityUser user = userRepository.findById(userEmail)
                 .orElseThrow(() -> new AppException(ErrorCode.USERMAIL_NOT_FOUND, userEmail + " 존재하지 않는 회원입니다."));
 
-        List<EntityCart> cartList = cartRepository.findByUserOrderByCartIdDesc(user);
+        List<EntityCart> entityCartList = cartRepository.findByUserOrderByCartIdDesc(user);
 
-        return cartList.stream()
+        return entityCartList.stream()
                 .map(this::checkedFavorite)
                 .collect(Collectors.toList());
     }
@@ -70,23 +70,23 @@ public class CartServiceImpl implements CartService {
         EntityUser user = userRepository.findById(userEmail)
                 .orElseThrow(() -> new AppException(ErrorCode.USERMAIL_NOT_FOUND, userEmail + " 존재하지 않는 회원입니다."));
 
-        List<EntityCart> cartList = cartDeleteRequestDTO.toEntity();
+        List<EntityCart> entityCartList = cartDeleteRequestDTO.toEntity();
 
-        cartList.forEach(cart -> cartRepository.findByUserAndCartId(user, cart.getCartId())
-                .orElseThrow(() -> new AppException(ErrorCode.CART_NOT_FOUND, cart.getCartId() + " 존재하지 않는 장바구니 상품입니다.")));
+        entityCartList.forEach(entityCart -> cartRepository.findByUserAndCartId(user, entityCart.getCartId())
+                .orElseThrow(() -> new AppException(ErrorCode.CART_NOT_FOUND, entityCart.getCartId() + " 존재하지 않는 장바구니 상품입니다.")));
 
-        cartRepository.deleteAll(cartList);
+        cartRepository.deleteAll(entityCartList);
 
         return "success";
     }
 
     //장바구니에 관심 상품표시를 체크하는 메서드
-    private CartResponseDTO checkedFavorite(EntityCart cart) {
+    private CartResponseDTO checkedFavorite(EntityCart entityCart) {
         CartResponseDTO responseDTO = CartResponseDTO.builder()
-                .cart(cart)
+                .entityCart(entityCart)
                 .build();
 
-        if (favoriteRepository.existsByUserAndFproduct(cart.getUser(), cart.getFproduct())) {
+        if (favoriteRepository.existsByUserAndFproduct(entityCart.getUser(), entityCart.getFproduct())) {
             responseDTO.setFavorite(true);
         }
 

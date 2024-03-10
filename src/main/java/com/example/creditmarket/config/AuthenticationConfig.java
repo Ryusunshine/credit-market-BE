@@ -1,4 +1,4 @@
-package com.example.creditmarket.configuration;
+package com.example.creditmarket.config;
 
 import com.example.creditmarket.service.Impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Collections;
 import java.util.List;
 
-
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -35,7 +34,8 @@ public class AuthenticationConfig {
                 .csrf().disable()
                 .cors().and()
                 .authorizeRequests()
-                .antMatchers("/usersignup", "/userlogin", "/search/**", "/item/**","/sendmail", "/newpassword").permitAll()
+                .antMatchers("/user/signup", "/user/login", "/search/**", "/item/**","/sendmail", "/newpassword")
+                .permitAll()
                 .antMatchers(HttpMethod.POST, "/**").authenticated()
                 .and()
                 .sessionManagement()
@@ -43,7 +43,6 @@ public class AuthenticationConfig {
                 .and()
                 .addFilterBefore(new JwtFilter(userServiceImpl, secretKey), UsernamePasswordAuthenticationFilter.class)
                 .build();
-
     }
 
     //Cors 설정

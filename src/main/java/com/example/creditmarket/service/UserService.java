@@ -2,27 +2,25 @@ package com.example.creditmarket.service;
 
 import com.example.creditmarket.dto.request.UserSignUpRequestDTO;
 import com.example.creditmarket.dto.response.LoginResponseDTO;
+import com.example.creditmarket.dto.response.UserInfoResponseDTO;
 import com.example.creditmarket.entity.EntityUser;
 
 import javax.servlet.http.HttpServletRequest;
 
 public interface UserService {
 
-    public String signup(UserSignUpRequestDTO request);
+    String signup(UserSignUpRequestDTO request);
 
-    public LoginResponseDTO login(String userEmail, String password);
+    LoginResponseDTO login(String userEmail, String password);
 
-    public Boolean isValid(String userToken);
+    Boolean isValid(String userToken);
 
-    public String logout(HttpServletRequest request);
+    String logout(HttpServletRequest request);
 
-    public EntityUser passwordCheck(String userEmail, String password);
+    UserInfoResponseDTO passwordCheck(String userEmail, String password);
 
-    public String infoUpdate(EntityUser user);
+    String infoUpdate(EntityUser user);
 
-    public EntityUser getUserInfo(HttpServletRequest request);
+    EntityUser getUserInfo(HttpServletRequest request);
 
-    String sendEmailAuth(String userEmail);
-
-    String sendNewPasswordAuth(String userEmail);
 }

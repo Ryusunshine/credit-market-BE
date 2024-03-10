@@ -2,26 +2,26 @@ package com.example.creditmarket.service.Impl;
 
 import com.example.creditmarket.dto.request.UserSignUpRequestDTO;
 import com.example.creditmarket.dto.response.LoginResponseDTO;
-import com.example.creditmarket.entity.EntityToken;
+import com.example.creditmarket.dto.response.UserInfoResponseDTO;
 import com.example.creditmarket.entity.EntityUser;
 import com.example.creditmarket.exception.AppException;
 import com.example.creditmarket.exception.ErrorCode;
-import com.example.creditmarket.repository.TokenRepository;
 import com.example.creditmarket.repository.UserRepository;
 import com.example.creditmarket.service.UserService;
 import com.example.creditmarket.utils.JwtUtil;
-import com.example.creditmarket.utils.RandomCertNumber;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpHeaders;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-
+import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
@@ -29,10 +29,8 @@ import javax.servlet.http.HttpServletRequest;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final TokenRepository tokenRepository;
     private final BCryptPasswordEncoder encoder;
-    private final JavaMailSender mailSender;
-
+    private final StringRedisTemplate redisTemplate;
 
     @Value("${jwt.token.secret}")
     private String secretKey;
@@ -48,9 +46,9 @@ public class UserServiceImpl implements UserService {
                 });
 
         //저장
-        //userRepository.save(request.toEntity());
         EntityUser EncodedEntityUser = EntityUser.builder()
                 .userEmail(request.getUserEmail())
+                .userName(request.getUserName())
                 .userPassword(encoder.encode(request.getUserPassword())) //Encoded
                 .userGender(request.getUserGender())
                 .userBirthdate(request.getUserBirthDate())
@@ -73,37 +71,49 @@ public class UserServiceImpl implements UserService {
         if (!encoder.matches(password, selectedUser.getUserPassword())) { //순서 중요. inputpassword, DBpassword
             throw new AppException(ErrorCode.INVALID_PASSWORD, "비밀번호가 틀렸습니다.");
         }
-
         String token = JwtUtil.createToken(selectedUser.getUserEmail(), secretKey, expiredMs);
+        // 레디스에 키 벨류 형식으로 회원 이메일, 토큰 저장
+        redisTemplate.opsForValue().set("RT:" + userEmail, token);
         return new LoginResponseDTO(selectedUser.getUserName(), token);
     }
 
     @Override
     public Boolean isValid(String userToken) {
-        //userToken 없음
-        return tokenRepository.findByToken(userToken) == null;
+        try {
+            ValueOperations<String, String> logoutValueOperations = redisTemplate.opsForValue();
+            if(logoutValueOperations.get(userToken) != null){
+                System.out.println("로그아웃된 토큰 입니다.");
+                return false;
+            }
+            return !Jwts.parser().setSigningKey(secretKey).parseClaimsJws(userToken)
+                    .getBody().getExpiration().before(new Date());
+        } catch (ExpiredJwtException e) {
+            e.getMessage();
+            return false;
+        }
     }
 
     @Override
     public String logout(HttpServletRequest request) {
-        // userToken 없음
-        // Token 꺼내기
         String token = request.getHeader(HttpHeaders.AUTHORIZATION).split(" ")[1].trim();
-        tokenRepository.save(new EntityToken(token));
+        String userEmail = JwtUtil.getUserEmail(token, secretKey);
+        if (redisTemplate.opsForValue().get("RT:" + userEmail)!= null) {
+            redisTemplate.delete("RT:" + userEmail);}
+        redisTemplate.opsForValue().set(token, "logout");
         return "LOGOUT_SUCCESS";
     }
 
     @Override
-    public EntityUser passwordCheck(String userEmail, String password) {
+    public UserInfoResponseDTO passwordCheck(String userEmail, String password) {
         //userEmail 없음
-        EntityUser selectedUser = userRepository.findByUserEmail(userEmail)
+        EntityUser user = userRepository.findByUserEmail(userEmail)
                 .orElseThrow(() -> new AppException(ErrorCode.USERMAIL_NOT_FOUND, userEmail + " 존재하지 않는 회원입니다."));
 
         //password 틀림
-        if (!encoder.matches(password, selectedUser.getUserPassword())) { //순서 중요. inputpassword, DBpassword
+        if (!encoder.matches(password, user.getUserPassword())) { //순서 중요. inputpassword, DBpassword
             throw new AppException(ErrorCode.INVALID_PASSWORD, "비밀번호가 틀렸습니다.");
         }
-        return selectedUser;
+        return UserInfoResponseDTO.of(user);
     }
 
     @Override
@@ -121,47 +131,5 @@ public class UserServiceImpl implements UserService {
         EntityUser selectedUser = userRepository.findByUserEmail(userEmail)
                 .orElseThrow(() -> new AppException(ErrorCode.USERMAIL_NOT_FOUND, userEmail + " 존재하지 않는 회원입니다."));
         return selectedUser;
-    }
-
-    @Override
-    public String sendEmailAuth(String userEmail) {
-        if (!userRepository.existsById(userEmail)) {
-            throw new AppException(ErrorCode.USERMAIL_NOT_FOUND, userEmail + " 존재하지 않는 회원입니다.");
-        }
-        String certNum = RandomCertNumber.getCertNum(5);
-
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(userEmail); //받는 사람
-        message.setSubject("안녕하세요. Credit Market입니다."); //제목
-        message.setText("인증번호는 [" + certNum + "]입니다."); //내용
-        message.setFrom("wpdud2003@gmail.com"); //보내는 사람
-        log.info("certNum={}", certNum);
-
-        mailSender.send(message);
-
-        return certNum;
-    }
-
-    @Override
-    public String sendNewPasswordAuth(String userEmail) {
-        if (!userRepository.existsById(userEmail)) {
-            throw new AppException(ErrorCode.USERMAIL_NOT_FOUND, userEmail + " 존재하지 않는 회원입니다.");
-        }
-        String newPassword = RandomCertNumber.getCertNum(10);
-
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(userEmail); //받는 사람
-        message.setSubject("안녕하세요. Credit Market입니다."); //제목
-        message.setText("임시 비밀번호는 [" + newPassword + "]입니다."); //내용
-        message.setFrom("wpdud2003@gmail.com"); //보내는 사람
-        log.info("certNum={}", newPassword);
-
-        EntityUser userInfo = userRepository.findByUserEmail(userEmail).get();
-        userInfo.setUserPassword(encoder.encode(newPassword));
-        userRepository.save(userInfo);
-
-        mailSender.send(message);
-
-        return newPassword;
     }
 }

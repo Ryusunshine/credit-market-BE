@@ -1,4 +1,4 @@
-package com.example.creditmarket.configuration;
+package com.example.creditmarket.config;
 
 import com.example.creditmarket.service.Impl.UserServiceImpl;
 import com.example.creditmarket.utils.JwtUtil;
@@ -46,20 +46,13 @@ public class JwtFilter extends OncePerRequestFilter {
         // Token 꺼내기
         String token = authorization.split(" ")[1].trim();
 
-        // log out 여부 확인
+
+        // 토큰 유효성 검사
         if (!userServiceImpl.isValid(token)) {
             log.error("Logged out user");
             filterChain.doFilter(request, response);
             return;
         }
-
-        // Token Expired 여부 확인
-        if (JwtUtil.isExpired(token, secretKey)) {
-            log.error("Token is Expired");
-            filterChain.doFilter(request, response);
-            return;
-        }
-
 
         // UserName Token에서 꺼내기
         String userName = JwtUtil.getUserEmail(token, secretKey);

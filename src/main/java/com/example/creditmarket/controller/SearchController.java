@@ -1,9 +1,6 @@
 package com.example.creditmarket.controller;
 
-import com.example.creditmarket.dto.request.AutoCompleteRequestDTO;
 import com.example.creditmarket.dto.response.MainListResponseDTO;
-import com.example.creditmarket.service.AutoCompleteService;
-import com.example.creditmarket.service.Impl.AutoCompleteServiceImpl;
 import com.example.creditmarket.service.Impl.SearchServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.Nullable;
@@ -17,10 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Api(tags = {"검색 서비스"}, description = "키워드와 카테고리 검색을 담당합니다.")
 public class SearchController {
-
     private final SearchServiceImpl searchServiceImpl;
-
-    private final AutoCompleteServiceImpl autoCompleteService;
 
     @GetMapping("/search/results")
     public List<MainListResponseDTO> searchKeyword(@RequestParam(required = false, defaultValue = "") @Nullable String keyword,
@@ -40,12 +34,4 @@ public class SearchController {
         return searchServiceImpl.searchResult(keyword.trim(), loan.trim(), age.trim(), gender.trim(), interest.trim(), rate, userEmail, (page-1));
     }
 
-    @PostMapping("/search/autocomplete")
-    public List<String> getAutoComplete(@RequestBody @Nullable AutoCompleteRequestDTO autoCompleteRequestDTO) {
-        String prefix = autoCompleteRequestDTO.getPrefix();
-        System.out.println("prefix = " + prefix);
-        List<String> result = autoCompleteService.getAutoComplete(prefix);
-        System.out.println("result = " + result);
-        return result;
-    }
 }

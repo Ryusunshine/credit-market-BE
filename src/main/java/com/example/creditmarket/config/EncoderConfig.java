@@ -1,4 +1,4 @@
-package com.example.creditmarket.configuration;
+package com.example.creditmarket.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

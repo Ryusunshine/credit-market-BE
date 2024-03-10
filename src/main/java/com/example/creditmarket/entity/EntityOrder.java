@@ -2,6 +2,7 @@ package com.example.creditmarket.entity;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
@@ -9,34 +10,24 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tb_order")
-@Data
+@Getter
 @Builder
 @RequiredArgsConstructor
 public class EntityOrder {
 
-    /*
-    order_id
-    order_status
-    order_date
-    user_email
-    fproduct_id
-     */
     @Id
-    @Column(name = "order_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
 
-    @Column(name = "order_status")
     private Integer orderStatus;
 
-    @Column(name = "order_date")
     private LocalDateTime orderDate;
 
-    @ManyToOne(targetEntity = EntityUser.class, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_email")
     private EntityUser user;
 
-    @ManyToOne(targetEntity = EntityFProduct.class, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fproduct_id")
     private EntityFProduct fproduct;
 
@@ -47,5 +38,9 @@ public class EntityOrder {
         this.orderDate = orderDate;
         this.user = user;
         this.fproduct = product;
+    }
+
+    public void updateOrderStatus(Integer status){
+        this.orderStatus = status;
     }
 }
