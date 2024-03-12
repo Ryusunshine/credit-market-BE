@@ -24,11 +24,11 @@ services:
   creditmarket-app: # 서비스명
     container_name: creditmarket-app # 컨테이너명
     build: .
-    depends_on:
-      - creditmarket-redis
+    depends_on: # DB, REDIS 컨테이너가 실행된 다음 WEB을 실행시킨다.
       - creditmarket-db
+      - creditmarket-redis
     image: ryusunny/creditmarket-app
-    environment: # DB, REDIS 컨테이너가 실행된 다음 WEB을 실행시킨다.
+    environment:
       SPRING_DATASOURCE_USERNAME: 'root'
       SPRING_DATASOURCE_PASSWORD: 'fbtjs4956'
       SPRING_PROFILES_ACTIVE: prod
