@@ -9,7 +9,7 @@ import com.example.creditmarket.entity.EntityUser;
 import com.example.creditmarket.exception.AppException;
 import com.example.creditmarket.exception.ErrorCode;
 import com.example.creditmarket.repository.CartRepository;
-import com.example.creditmarket.repository.FProductRespository;
+import com.example.creditmarket.repository.FProductRepository;
 import com.example.creditmarket.repository.FavoriteRepository;
 import com.example.creditmarket.repository.UserRepository;
 import com.example.creditmarket.service.CartService;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class CartServiceImpl implements CartService {
 
     private final CartRepository cartRepository;
-    private final FProductRespository fProductRespository;
+    private final FProductRepository productRepository;
     private final UserRepository userRepository;
     private final FavoriteRepository favoriteRepository;
 
@@ -36,7 +36,7 @@ public class CartServiceImpl implements CartService {
                 .orElseThrow(() -> new AppException(ErrorCode.USERMAIL_NOT_FOUND, userEmail + " 존재하지 않는 회원입니다."));
 
         String productId = cartRequestDTO.getProductId();
-        EntityFProduct fProduct = fProductRespository.findById(productId)
+        EntityFProduct fProduct = productRepository.findById(productId)
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND, productId + " 존재하지 않는 상품입니다."));
 
         if (cartRepository.existsByUserAndFproduct(user, fProduct)) {
@@ -54,7 +54,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public List<CartResponseDTO> selectCartList(String userEmail) {
+    public List<CartResponseDTO> getCartList(String userEmail) {
         EntityUser user = userRepository.findById(userEmail)
                 .orElseThrow(() -> new AppException(ErrorCode.USERMAIL_NOT_FOUND, userEmail + " 존재하지 않는 회원입니다."));
 

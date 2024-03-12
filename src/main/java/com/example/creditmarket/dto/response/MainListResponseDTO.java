@@ -1,21 +1,46 @@
 package com.example.creditmarket.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.example.creditmarket.entity.EntityOption;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class MainListResponseDTO {
-    private String companyName; // 은행
-    private String productName; // 대출 상품
-    private String productTypeName; // 대출 종류
-    private Double avgInterest; // 평균 금리
-    private String optionsInterestType;    // 금리 유형
-    private boolean favorite;   // 관심상품 등록 여부
-    private String productId; // 상품 id
+@Getter
+@SuperBuilder
+public class MainListResponseDTO extends SearchResultDto{
+    private final boolean favorite;   // 관심상품 등록 여부
+
+    public static MainListResponseDTO of (EntityOption option, boolean favorite){
+        return MainListResponseDTO.builder()
+                .companyName(option.getEntityFProduct().getFproduct_company_name())
+                .productName(option.getEntityFProduct().getFproduct_name())
+                .productTypeName(option.getEntityFProduct().getFproduct_credit_product_type_name())
+                .avgInterest(option.getOptions_crdt_grad_avg())
+                .optionsInterestType(option.getOptions_interest_type())
+                .productId(option.getEntityFProduct().getFproduct_id())
+                .favorite(favorite)
+                .build();
+    }
+
+    public static MainListResponseDTO searchDtoToMainListDto (SearchResultDto dto){
+        return MainListResponseDTO.builder()
+                .companyName(dto.getCompanyName())
+                .productName(dto.getProductName())
+                .productTypeName(dto.getProductTypeName())
+                .avgInterest(dto.getAvgInterest())
+                .optionsInterestType(dto.getOptionsInterestType())
+                .productId(dto.getProductId())
+                .build();
+    }
+
+    public static MainListResponseDTO entityToDto (EntityOption option){
+        return MainListResponseDTO.builder()
+                .companyName(option.getEntityFProduct().getFproduct_company_name())
+                .productName(option.getEntityFProduct().getFproduct_name())
+                .productTypeName(option.getEntityFProduct().getFproduct_credit_product_type_name())
+                .avgInterest(option.getOptions_crdt_grad_avg())
+                .optionsInterestType(option.getOptions_interest_type())
+                .productId(option.getEntityFProduct().getFproduct_id())
+                .build();
+    }
 
 }

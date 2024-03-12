@@ -7,7 +7,6 @@ import lombok.Getter;
 @Getter
 @Builder
 public class UserInfoResponseDTO {
-
     private String email;
     private String password;
     private String gender;

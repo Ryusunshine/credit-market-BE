@@ -9,20 +9,13 @@ import lombok.ToString;
 @Getter
 @ToString
 public class FavoriteResponseDTO {
-
-    private Long favoriteId;
-
-    private String companyName;
-
-    private String productName;
-
-    private String productTypeName;
-
-    private String productId;
-
-    private Double avgInterest;
-
-    private String optionsInterestType;
+    private final Long favoriteId;
+    private final String companyName;
+    private final String productName;
+    private final String productTypeName;
+    private final String productId;
+    private final Double avgInterest;
+    private final String optionsInterestType;
 
     @Builder
     public FavoriteResponseDTO(EntityFavorite favorite, EntityOption option) {

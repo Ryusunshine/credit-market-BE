@@ -9,22 +9,14 @@ import lombok.ToString;
 @Getter
 @ToString
 public class OrderResponseDTO {
-
-    private Long orderId;
-
-    private int orderStatus;
-
-    private String companyName;
-
-    private String productName;
-
-    private String productTypeName;
-
-    private String productId;
-
-    private Double avgInterest;
-
-    private String optionsInterestType;
+    private final Long orderId;
+    private final int orderStatus;
+    private final String companyName;
+    private final String productName;
+    private final String productTypeName;
+    private final String productId;
+    private final Double avgInterest;
+    private final String optionsInterestType;
 
     @Builder
     public OrderResponseDTO(EntityOrder order, EntityOption option) {

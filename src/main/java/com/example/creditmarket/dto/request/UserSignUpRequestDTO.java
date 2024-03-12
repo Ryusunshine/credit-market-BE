@@ -1,10 +1,11 @@
 package com.example.creditmarket.dto.request;
 
 import com.example.creditmarket.entity.EntityUser;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
 
+@Setter
 @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class UserSignUpRequestDTO {
     private String userEmail;

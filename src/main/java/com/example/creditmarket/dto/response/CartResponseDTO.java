@@ -8,15 +8,10 @@ import lombok.ToString;
 @Getter
 @ToString
 public class CartResponseDTO {
-
-    private Long cartId;
-
-    private String companyName;
-
-    private String productName;
-
-    private String productId;
-
+    private final Long cartId;
+    private final String companyName;
+    private final String productName;
+    private final String productId;
     private boolean favorite;
 
     public void setFavorite(boolean favorite) {

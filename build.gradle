@@ -35,8 +35,9 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
     // json
-// https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
     //swagger
     implementation group: 'io.springfox', name: 'springfox-swagger2', version: '3.0.0'

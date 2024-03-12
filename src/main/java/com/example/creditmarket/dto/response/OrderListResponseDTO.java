@@ -7,9 +7,8 @@ import java.util.List;
 
 @Getter
 public class OrderListResponseDTO {
-
-    private List<OrderResponseDTO> list;
-    private int totalNum;
+    private final List<OrderResponseDTO> list;
+    private final int totalNum;
 
     @Builder
     public OrderListResponseDTO(List<OrderResponseDTO> list, int totalNum) {

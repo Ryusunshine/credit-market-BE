@@ -23,4 +23,10 @@ public class EntityFavorite {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fproduct_id")
     private EntityFProduct fproduct;
+
+    @Builder
+    public EntityFavorite(EntityUser user, EntityFProduct product){
+        this.user = user;
+        this.fproduct = product;
+    }
 }

@@ -13,8 +13,9 @@ public enum ErrorCode {
     CART_NOT_FOUND(HttpStatus.NOT_FOUND, ""),
     PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, ""),
     PAGE_INDEX_ZERO(HttpStatus.BAD_REQUEST, ""),
-    ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "");
-
+    ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, ""),
+    COMMON_NOT_FOUND(HttpStatus.NOT_FOUND, ""),
+    DATABASE_ERROR(HttpStatus.CONFLICT, "");
 
     private HttpStatus httpStatus;
     private String message;

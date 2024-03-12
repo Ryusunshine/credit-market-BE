@@ -32,7 +32,7 @@ public class UserController {
         return ResponseEntity.ok().body(loginReturn);
     }
 
-    @PostMapping("/authorizationTest")
+    @PostMapping("authorizationTest")
     public ResponseEntity<String> review(@RequestBody Authentication authentication) {
         return ResponseEntity.ok().body(authentication.getName() + " SUCCESS");
     }

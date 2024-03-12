@@ -11,10 +11,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "tb_order")
 @Getter
-@Builder
 @RequiredArgsConstructor
 public class EntityOrder {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
@@ -32,10 +30,9 @@ public class EntityOrder {
     private EntityFProduct fproduct;
 
     @Builder
-    public EntityOrder(Long orderId, int orderStatus, LocalDateTime orderDate, EntityUser user, EntityFProduct product){
-        this.orderId = orderId;
+    public EntityOrder(int orderStatus, EntityUser user, EntityFProduct product){
         this.orderStatus = orderStatus;
-        this.orderDate = orderDate;
+        this.orderDate = LocalDateTime.now();
         this.user = user;
         this.fproduct = product;
     }

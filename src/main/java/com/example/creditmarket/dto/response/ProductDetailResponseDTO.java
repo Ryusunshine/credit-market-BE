@@ -11,26 +11,42 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Data
-public class ProductDetailResponseDTO {
-    //상품명, 개요, 대상, 한도, 금리 등의 상세정보 출력
-
+public class ProductDetailResponseDTO { //상품명, 개요, 대상, 한도, 금리 등의 상세정보 출력
     private String productId;
     private String productName;
     private String companyName;
-    private boolean favorite;
     private String productTypeName;
     private Double avgInterest; // 평균 금리
     private String optionsInterestType; //금리 구분
     private String productJoinMethod;
+    private boolean favorite;
 
-    public ProductDetailResponseDTO(EntityFProduct entity, EntityOption option, boolean isFavorite){
-        this.companyName = entity.getFproduct_company_name();
-        this.productId = entity.getFproduct_id();
-        this.productTypeName = entity.getFproduct_credit_product_type_name();
-        this.productJoinMethod = entity.getFproduct_join_method();
-        this.productName = entity.getFproduct_name();
-        this.avgInterest = option.getOptions_crdt_grad_avg();
-        this.optionsInterestType = option.getOptions_interest_type();
-        this.favorite = isFavorite;
+    public static ProductDetailResponseDTO of(EntityFProduct product, EntityOption option){
+        ProductDetailResponseDTOBuilder dto = ProductDetailResponseDTO.builder()
+                .companyName(product.getFproduct_company_name())
+                .productId(product.getFproduct_id())
+                .productTypeName(product.getFproduct_credit_product_type_name())
+                .productJoinMethod(product.getFproduct_join_method())
+                .productName(product.getFproduct_name());
+        if (option != null){
+            dto.avgInterest(option.getOptions_crdt_grad_avg());
+            dto.optionsInterestType(option.getOptions_interest_type());
+        }
+        return dto.build();
+    }
+
+    public static ProductDetailResponseDTO productWithFavor (EntityFProduct product, EntityOption option, boolean isFavorite){
+        ProductDetailResponseDTOBuilder dto = ProductDetailResponseDTO.builder()
+                .companyName(product.getFproduct_company_name())
+                .productId(product.getFproduct_id())
+                .productTypeName(product.getFproduct_credit_product_type_name())
+                .productJoinMethod(product.getFproduct_join_method())
+                .productName(product.getFproduct_name())
+                .favorite(isFavorite);
+        if (option != null){
+            dto.avgInterest(option.getOptions_crdt_grad_avg());
+            dto.optionsInterestType(option.getOptions_interest_type());
+        }
+        return dto.build();
     }
 }

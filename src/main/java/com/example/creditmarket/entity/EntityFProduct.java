@@ -17,7 +17,6 @@ import javax.persistence.Table;
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class EntityFProduct {
-
     @Id
     @Column(name = "fproduct_id")
     private String fproduct_id;

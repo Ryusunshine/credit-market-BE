@@ -3,18 +3,14 @@ package com.example.creditmarket.dto.request;
 import com.example.creditmarket.entity.EntityFProduct;
 import com.example.creditmarket.entity.EntityFavorite;
 import com.example.creditmarket.entity.EntityUser;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@NoArgsConstructor
+@Setter
 @AllArgsConstructor
-@Data
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class FavoriteRequestDto {
-
     private EntityUser user;
-
     private EntityFProduct product;
 
     @Builder
