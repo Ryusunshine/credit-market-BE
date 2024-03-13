@@ -1,13 +1,5 @@
 version: "3.8"
 services:
-  creditmarket-redis: # 서비스명
-    container_name: creditmarket-redis # 컨테이너명
-    build:
-      dockerfile: Dockerfile
-      context: ./redis
-    image: ryusunny/creditmarket-redis
-    ports:
-      - "6379:6379"
   creditmarket-db: # 서비스명
     container_name: creditmarket-db # 컨테이너명
     build:
@@ -22,13 +14,21 @@ services:
       - ./database/init:/docker-entrypoint-initdb.d
     ports:
       - "3308:3308"
-    healthcheck:
-      test: [ "CMD", "mysqladmin", "-pfbtjs4956", "ping", "-h", "localhost" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+  creditmarket-redis: # 서비스명
+    container_name: creditmarket-redis # 컨테이너명
+    build:
+      dockerfile: Dockerfile
+      context: ./redis
+    image: ryusunny/creditmarket-redis
+    ports:
+      - "6379:6379"
   creditmarket-app: # 서비스명
     container_name: creditmarket-app # 컨테이너명
+    command: >
+      sh -c "
+      dockerize -wait tcp://creditmarket-db:3308 -timeout 30s &&
+      dockerize -wait tcp://creditmarket-redis:6379 -timeout 30s &&
+      java -jar your-application.jar
     build: .
     depends_on: # DB, REDIS 컨테이너가 실행된 다음 WEB을 실행시킨다.
       - creditmarket-db
