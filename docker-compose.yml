@@ -1,5 +1,13 @@
 version: "3.8"
 services:
+  creditmarket-redis: # 서비스명
+    container_name: creditmarket-redis # 컨테이너명
+    build:
+      dockerfile: Dockerfile
+      context: ./redis
+    image: ryusunny/creditmarket-redis
+    ports:
+      - "6379:6379"
   creditmarket-db: # 서비스명
     container_name: creditmarket-db # 컨테이너명
     build:
@@ -11,17 +19,8 @@ services:
       MYSQL_ROOT_PASSWORD: 'fbtjs4956'
     volumes:
       - ./database/config:/etc/mysql/conf.d
-      - ./database/init:/docker-entrypoint-initdb.d
     ports:
       - "3308:3308"
-  creditmarket-redis: # 서비스명
-    container_name: creditmarket-redis # 컨테이너명
-    build:
-      dockerfile: Dockerfile
-      context: ./redis
-    image: ryusunny/creditmarket-redis
-    ports:
-      - "6379:6379"
   creditmarket-app: # 서비스명
     container_name: creditmarket-app # 컨테이너명
     build: .
@@ -32,12 +31,10 @@ services:
     environment:
       SPRING_DATASOURCE_USERNAME: 'root'
       SPRING_DATASOURCE_PASSWORD: 'fbtjs4956'
-      SPRING_PROFILES_ACTIVE: 'prod'
+      SPRING_PROFILES_ACTIVE: prod
     ports:
       - "80:8080" # 접근 포트 설정 (컨테이너 외부:컨테이너 내부)
     restart: always
-
     # depends on은 실행 순서만 컨트롤 할뿐,
     # 컨테이너 안의 서비스가 실행가능한 상태인지까지는 확인 하지 않기 때문에
     # DB 또는 Redis가 아직 실행가능한 상태가 아니여서 실패하는 경우 재시작 하도록 설정
-
