@@ -28,7 +28,7 @@ spring:
       on-profile: local
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3308/creditmarket
+    url: jdbc:mysql://localhost:3306/creditmarket
     username: root
     password: fbtjs4956
   redis:
@@ -38,11 +38,10 @@ spring:
     show-sql: true
     database: mysql
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
-
 
 ---
 spring:
@@ -51,7 +50,7 @@ spring:
       on-profile: prod
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://creditmarket-db:3308/creditmarket
+    url: jdbc:mysql://creditmarket-db:3306/creditmarket
     username: root
     password: fbtjs4956
   redis:

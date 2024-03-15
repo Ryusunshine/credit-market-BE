@@ -20,4 +20,4 @@ services:
     volumes:
       - ./database/config:/etc/mysql/conf.d
     ports:
-      - "3308:3308"
+      - "3307:3306"
