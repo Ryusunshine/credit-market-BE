@@ -4,6 +4,8 @@ import com.example.creditmarket.dto.request.UserSignUpRequestDTO;
 import com.example.creditmarket.dto.response.LoginResponseDTO;
 import com.example.creditmarket.dto.response.UserInfoResponseDTO;
 import com.example.creditmarket.entity.EntityUser;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 

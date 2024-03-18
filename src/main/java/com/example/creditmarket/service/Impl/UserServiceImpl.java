@@ -36,6 +36,9 @@ public class UserServiceImpl implements UserService {
     private String secretKey;
     private Long expiredMs = 1000 * 60 * 60 * 24 * 7L; //일주일
 
+    @Value("C:/Users/profile/img/")
+    private String uploadDir;
+
     @Override
     public String signup(UserSignUpRequestDTO request) {
 
@@ -57,6 +60,7 @@ public class UserServiceImpl implements UserService {
                 .userPrefInterestType(request.getUserPrefInterestType())
                 .userCreditScore(request.getUserCreditScore())
                 .build();
+
         userRepository.save(EncodedEntityUser);
         return "success";
     }
@@ -132,4 +136,44 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new AppException(ErrorCode.USERMAIL_NOT_FOUND, userEmail + " 존재하지 않는 회원입니다."));
         return selectedUser;
     }
+//
+//    @Override
+//    public String updateImg(String userEmail, MultipartFile file) {
+//        if (file == null){
+//            throw new AppException(ErrorCode.COMMON_NOT_FOUND, "파일이 없습니다");
+//        }
+//
+//        try {
+//            String image = uploadPic(file);
+//            EntityUser selectedUser = userRepository.findByUserEmail(userEmail)
+//                    .orElseThrow(() -> new AppException(ErrorCode.USERMAIL_NOT_FOUND, userEmail + " 존재하지 않는 회원입니다."));
+//
+//            selectedUser.setImg(image);
+//
+//        } catch (IOException e) {
+//            throw new AppException(ErrorCode.DATABASE_ERROR, "사진 저장에 실패했습니다");
+//        }
+//
+//        return "success";
+//    }
+//
+//
+//    /*
+//    파일 업로드 관련 메서드
+//     */
+//    private String uploadPic(MultipartFile file) throws IOException {
+//        Path uploadPath = Paths.get(uploadDir);
+//        if (!Files.isDirectory(uploadPath)) {
+//            Files.createDirectories(uploadPath);
+//        }
+//
+//        UUID uuid = UUID.randomUUID(); // 중복 방지를 위한 랜덤 값
+//        String originFileName = file.getOriginalFilename(); //파일 원래 이름
+//        String fullPath = uploadDir + uuid.toString() + "_" + originFileName;
+//        file.transferTo(new File(fullPath));
+//
+//        return fullPath;
+//    }
+
+
 }
