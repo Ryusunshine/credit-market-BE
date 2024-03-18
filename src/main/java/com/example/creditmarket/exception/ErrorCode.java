@@ -15,7 +15,8 @@ public enum ErrorCode {
     PAGE_INDEX_ZERO(HttpStatus.BAD_REQUEST, ""),
     ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, ""),
     COMMON_NOT_FOUND(HttpStatus.NOT_FOUND, ""),
-    DATABASE_ERROR(HttpStatus.CONFLICT, "");
+    DATABASE_ERROR(HttpStatus.CONFLICT, ""),
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "");
 
     private HttpStatus httpStatus;
     private String message;
