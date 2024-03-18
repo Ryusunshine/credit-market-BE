@@ -34,10 +34,4 @@ public class EntityUser {
 
     private Long userCreditScore;
 
-    private String image;
-
-    public void setImg(String image){
-        this.image = image;
-    }
-
 }
