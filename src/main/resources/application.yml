@@ -30,18 +30,7 @@ file:
   dir: C:/project/
 
 
-cloud:
-  aws:
-    s3:
-      bucket: creditmarket-file # {버킷명}
-    credentials:
-      access-key:
-      secret-key:
-    region:
-      static: ap-northeast-2
-      auto: false
-    stack:
-      auto: false
+
 
 ---
 spring:
