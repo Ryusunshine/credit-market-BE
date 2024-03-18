@@ -35,8 +35,8 @@ cloud:
     s3:
       bucket: creditmarket-file # {버킷명}
     credentials:
-      access-key: AKIAZMG7337Z24QZIRMA
-      secret-key: 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
+      access-key:
+      secret-key:
     region:
       static: ap-northeast-2
       auto: false
