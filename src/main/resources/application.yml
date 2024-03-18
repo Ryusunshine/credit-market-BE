@@ -12,11 +12,6 @@ spring:
   config:
     activate:
       on-profile: common
-  servlet:
-    multipart:
-      enabled: true # 멀티파트 업로드 지원여부 (default: true)
-      max-file-size: 100MB # 한개 파일의 최대 사이즈 (default: 1MB)
-      max-request-size: 100MB #
 
 open:
   api:
@@ -25,12 +20,6 @@ open:
 jwt:
   token:
     secret: secretKey
-
-file:
-  dir: C:/project/
-
-
-
 
 ---
 spring:
@@ -49,7 +38,7 @@ spring:
     show-sql: true
     database: mysql
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
@@ -75,7 +64,6 @@ spring:
     properties:
       hibernate:
         format_sql: true
-
 
 
 
