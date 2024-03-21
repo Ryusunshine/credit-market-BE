@@ -17,6 +17,9 @@ spring:
       enabled: true # 멀티파트 업로드 지원여부 (default: true)
       max-file-size: 100MB # 한개 파일의 최대 사이즈 (default: 1MB)
       max-request-size: 100MB #
+  kafka:
+    consumer:
+      group-id: alarm
 
 open:
   api:
@@ -28,20 +31,6 @@ jwt:
 
 file:
   dir: C:/project/
-
-
-cloud:
-  aws:
-    s3:
-      bucket: creditmarket-file # {버킷명}
-    credentials:
-      access-key: AKIAZMG7337Z24QZIRMA
-      secret-key: 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
-    region:
-      static: ap-northeast-2
-      auto: false
-    stack:
-      auto: false
 
 ---
 spring:
