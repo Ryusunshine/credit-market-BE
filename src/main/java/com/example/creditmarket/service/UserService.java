@@ -26,5 +26,4 @@ public interface UserService {
 
     EntityUser getUserInfo(HttpServletRequest request);
 
-    Page<AlarmReponse> getAlarmList(Long userId, Pageable pageable);
 }

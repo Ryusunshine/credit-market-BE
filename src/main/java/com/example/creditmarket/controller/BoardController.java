@@ -144,7 +144,7 @@ public class BoardController {
 
     @GetMapping("alarm")
     public ResponseEntity<Page<AlarmReponse>> alarm(Long userId, Pageable pageable) {
-        return ResponseEntity.ok().body(userService.getAlarmList(userId, pageable));
+        return ResponseEntity.ok().body(alarmService.getAlarmList(userId, pageable));
     }
 
 

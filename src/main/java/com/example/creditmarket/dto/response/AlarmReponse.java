@@ -3,38 +3,32 @@ package com.example.creditmarket.dto.response;
 import com.example.creditmarket.domain.entity.EntityAlarm;
 import com.example.creditmarket.domain.enums.AlarmType;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
 @Getter
+@Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class AlarmReponse {
-    private Long alarmId = null;
+    private Long alarmId;
 
     private AlarmType alarmType;
 
     private HashMap<Long, Long> args;
 
-    private LocalDateTime registeredAt;
-
-    private LocalDateTime updatedAt;
-
-    private LocalDateTime removedAt;
-
-    public String getAlarmText() {
-        return alarmType.getAlarmText();
-    }
+    private String alarmText;
 
     public static AlarmReponse fromEntity(EntityAlarm entity) {
-        return new AlarmReponse(
-                entity.getAlarmId(),
-                entity.getAlarmType(),
-                entity.getArgs(),
-                entity.getRegisteredAt(),
-                entity.getUpdatedAt(),
-                entity.getRemovedAt()
-        );
+        return AlarmReponse.builder()
+                .alarmId(entity.getAlarmId())
+                .alarmType(entity.getAlarmType())
+                .args(entity.getArgs())
+                .alarmText(entity.getAlarmType().getAlarmText())
+                .build();
     }
 }

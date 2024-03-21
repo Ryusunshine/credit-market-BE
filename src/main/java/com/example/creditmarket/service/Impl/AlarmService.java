@@ -10,8 +10,11 @@ import com.example.creditmarket.domain.enums.AlarmType;
 import com.example.creditmarket.domain.repository.AlarmRepository;
 import com.example.creditmarket.domain.repository.EmitterRepository;
 import com.example.creditmarket.domain.repository.UserRepository;
+import com.example.creditmarket.dto.response.AlarmReponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -23,12 +26,12 @@ import java.util.HashMap;
 @RequiredArgsConstructor
 @Service
 public class AlarmService {
-    private final static String ALARM_NAME = "alarm";
-
     private final AlarmRepository alarmRepository;
     private final EmitterRepository emitterRepository;
     private final UserRepository userRepository;
     private static final Long DEFAULT_TIMEOUT = 60L * 1000 * 60;
+
+    private final static String ALARM_NAME = "alarm";
 
     @Transactional
     public void send(AlarmType type, AlarmArgs args, Long receiverId) {
@@ -80,5 +83,9 @@ public class AlarmService {
         return emitter;
     }
 
+    @Transactional(readOnly = true)
+    public Page<AlarmReponse> getAlarmList(Long userId, Pageable pageable) {
+        return alarmRepository.findAllByUserUserId(userId, pageable).map(AlarmReponse::fromEntity);
+    }
 
 }

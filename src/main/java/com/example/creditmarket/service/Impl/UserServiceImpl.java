@@ -140,8 +140,4 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new AppException(ErrorCode.USERMAIL_NOT_FOUND, userEmail + " 존재하지 않는 회원입니다."));
     }
 
-    @Override
-    public Page<AlarmReponse> getAlarmList(Long userId, Pageable pageable) {
-        return alarmRepository.findAllByUserUserId(userId, pageable).map(AlarmReponse::fromEntity);
-    }
 }
