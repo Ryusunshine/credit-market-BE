@@ -1,4 +1,4 @@
-package com.example.creditmarket.exception;
+package com.example.creditmarket.common;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

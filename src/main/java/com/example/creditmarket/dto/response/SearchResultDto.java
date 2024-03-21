@@ -1,8 +1,7 @@
 package com.example.creditmarket.dto.response;
 
-import com.example.creditmarket.entity.EntityOption;
+import com.example.creditmarket.domain.entity.EntityOption;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;

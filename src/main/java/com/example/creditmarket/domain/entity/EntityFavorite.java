@@ -1,25 +1,23 @@
-package com.example.creditmarket.entity;
+package com.example.creditmarket.domain.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "tb_order")
+@Table(name = "tb_favorite")
 @Getter
+@Builder
 @RequiredArgsConstructor
-public class EntityOrder {
+@AllArgsConstructor
+public class EntityFavorite {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long orderId;
-
-    private Integer orderStatus;
-
-    private LocalDateTime orderDate;
+    private Long favoriteId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_email")
@@ -30,14 +28,8 @@ public class EntityOrder {
     private EntityFProduct fproduct;
 
     @Builder
-    public EntityOrder(int orderStatus, EntityUser user, EntityFProduct product){
-        this.orderStatus = orderStatus;
-        this.orderDate = LocalDateTime.now();
+    public EntityFavorite(EntityUser user, EntityFProduct product){
         this.user = user;
         this.fproduct = product;
-    }
-
-    public void updateOrderStatus(Integer status){
-        this.orderStatus = status;
     }
 }

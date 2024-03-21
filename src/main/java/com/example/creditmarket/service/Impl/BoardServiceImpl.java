@@ -1,18 +1,22 @@
 package com.example.creditmarket.service.Impl;
 
+import com.example.creditmarket.common.AppException;
+import com.example.creditmarket.common.ErrorCode;
+import com.example.creditmarket.domain.entity.*;
+import com.example.creditmarket.domain.enums.AlarmArgs;
+import com.example.creditmarket.domain.enums.AlarmEvent;
+import com.example.creditmarket.domain.enums.AlarmType;
+import com.example.creditmarket.domain.repository.*;
 import com.example.creditmarket.dto.request.BoardRequest;
+import com.example.creditmarket.dto.request.CommentRequest;
 import com.example.creditmarket.dto.response.BoardResponse;
+import com.example.creditmarket.dto.response.CommentResponse;
 import com.example.creditmarket.dto.response.DataResponse;
-import com.example.creditmarket.entity.EntityBoard;
-import com.example.creditmarket.entity.EntityBoardFile;
-import com.example.creditmarket.entity.EntityBoardImg;
-import com.example.creditmarket.exception.AppException;
-import com.example.creditmarket.exception.ErrorCode;
-import com.example.creditmarket.repository.BoardFileRepository;
-import com.example.creditmarket.repository.BoardImgRepository;
-import com.example.creditmarket.repository.BoardRepository;
+import com.example.creditmarket.kafka.producer.AlarmProducer;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.UrlResource;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -22,6 +26,7 @@ import javax.persistence.EntityManager;
 import java.io.*;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BoardServiceImpl {
@@ -30,6 +35,10 @@ public class BoardServiceImpl {
     private final BoardFileRepository boardFileRepository;
     private final BoardImgRepository boardImgRepository;
     private final FileServiceImpl fileService;
+    private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
+    private final AlarmProducer alarmProducer;
+
 
     /**
      * 게시글 등록
@@ -186,6 +195,31 @@ public class BoardServiceImpl {
     public EntityBoardFile getFile(Long id){
         return boardFileRepository.findById(id).orElseThrow(null);
     }
+
+
+    @Transactional
+    public String comment(CommentRequest request) {
+        EntityBoard board = boardRepository.findById(request.getBoardId()).orElseThrow(
+                () -> new AppException(ErrorCode.POST_NOT_FOUND, "게시글이 존재하지 않습니다."));
+        EntityUser user = userRepository.findByUserId(request.getUserId())
+                .orElseThrow(() -> new AppException(ErrorCode.USERMAIL_NOT_FOUND, " 존재하지 않는 회원입니다."));
+
+        try {
+            commentRepository.save(EntityComment.of(request.getComment(), board, user));
+        } catch (Exception e){
+            throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR, "댓글 작성에 실패하였습니다");
+        }
+
+        alarmProducer.send(new AlarmEvent(AlarmType.NEW_COMMENT, new AlarmArgs(user.getUserId(), board.getBoardId()), board.getUser().getUserId()));
+        return "success";
+    }
+
+    public Page<CommentResponse> getComments(Long boardId, Pageable pageable) {
+        EntityBoard board = boardRepository.findById(boardId).orElseThrow(
+                () -> new AppException(ErrorCode.POST_NOT_FOUND, String.format("boardId is %d", boardId)));
+        return commentRepository.findAllByBoard(board, pageable).map(CommentResponse::fromEntity);
+    }
+
 
 
 }

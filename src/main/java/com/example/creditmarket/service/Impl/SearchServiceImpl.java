@@ -1,12 +1,12 @@
 package com.example.creditmarket.service.Impl;
 
 import com.example.creditmarket.cache.SearchRedisTemplateService;
+import com.example.creditmarket.domain.entity.EntityOption;
+import com.example.creditmarket.domain.entity.EntityUser;
+import com.example.creditmarket.domain.repository.OptionRepository;
+import com.example.creditmarket.domain.repository.UserRepository;
 import com.example.creditmarket.dto.response.MainListResponseDTO;
 import com.example.creditmarket.dto.response.SearchResultDto;
-import com.example.creditmarket.entity.EntityOption;
-import com.example.creditmarket.entity.EntityUser;
-import com.example.creditmarket.repository.OptionRepository;
-import com.example.creditmarket.repository.UserRepository;
 import com.example.creditmarket.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.example.creditmarket.utils;
+package com.example.creditmarket.common;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

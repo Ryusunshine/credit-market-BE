@@ -1,10 +1,8 @@
-package com.example.creditmarket.entity;
+package com.example.creditmarket.domain.entity;
 
-import com.example.creditmarket.dto.request.BoardRequest;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Getter
@@ -17,6 +15,9 @@ public class EntityBoard {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long boardId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private EntityUser user;
+
     @Setter
     private String title;
 
@@ -25,7 +26,8 @@ public class EntityBoard {
 
 
     @Builder
-    public EntityBoard (String title, String content){
+    public EntityBoard (EntityUser user, String title, String content){
+        this.user = user;
         this.title = title;
         this.content = content;
     }

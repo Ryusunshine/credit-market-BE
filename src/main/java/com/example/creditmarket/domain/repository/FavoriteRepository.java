@@ -1,8 +1,8 @@
-package com.example.creditmarket.repository;
+package com.example.creditmarket.domain.repository;
 
-import com.example.creditmarket.entity.EntityFProduct;
-import com.example.creditmarket.entity.EntityFavorite;
-import com.example.creditmarket.entity.EntityUser;
+import com.example.creditmarket.domain.entity.EntityFProduct;
+import com.example.creditmarket.domain.entity.EntityFavorite;
+import com.example.creditmarket.domain.entity.EntityUser;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

@@ -1,19 +1,23 @@
 package com.example.creditmarket.service.Impl;
 
+import com.example.creditmarket.common.AppException;
+import com.example.creditmarket.common.ErrorCode;
+import com.example.creditmarket.common.JwtUtil;
+import com.example.creditmarket.domain.entity.EntityUser;
+import com.example.creditmarket.domain.repository.AlarmRepository;
+import com.example.creditmarket.domain.repository.UserRepository;
 import com.example.creditmarket.dto.request.UserSignUpRequestDTO;
+import com.example.creditmarket.dto.response.AlarmReponse;
 import com.example.creditmarket.dto.response.LoginResponseDTO;
 import com.example.creditmarket.dto.response.UserInfoResponseDTO;
-import com.example.creditmarket.entity.EntityUser;
-import com.example.creditmarket.exception.AppException;
-import com.example.creditmarket.exception.ErrorCode;
-import com.example.creditmarket.repository.UserRepository;
 import com.example.creditmarket.service.UserService;
-import com.example.creditmarket.utils.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpHeaders;
@@ -23,6 +27,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -31,6 +36,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder encoder;
     private final StringRedisTemplate redisTemplate;
+    private final AlarmRepository alarmRepository;
 
     @Value("${jwt.token.secret}")
     private String secretKey;
@@ -128,52 +134,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public EntityUser getUserInfo(HttpServletRequest request) {
-        // userToken 없음
-        // Token 꺼내기
         String token = request.getHeader(HttpHeaders.AUTHORIZATION).split(" ")[1].trim();
         String userEmail = JwtUtil.getUserEmail(token, secretKey);
-        EntityUser selectedUser = userRepository.findByUserEmail(userEmail)
+        return userRepository.findByUserEmail(userEmail)
                 .orElseThrow(() -> new AppException(ErrorCode.USERMAIL_NOT_FOUND, userEmail + " 존재하지 않는 회원입니다."));
-        return selectedUser;
     }
-//
-//    @Override
-//    public String updateImg(String userEmail, MultipartFile file) {
-//        if (file == null){
-//            throw new AppException(ErrorCode.COMMON_NOT_FOUND, "파일이 없습니다");
-//        }
-//
-//        try {
-//            String image = uploadPic(file);
-//            EntityUser selectedUser = userRepository.findByUserEmail(userEmail)
-//                    .orElseThrow(() -> new AppException(ErrorCode.USERMAIL_NOT_FOUND, userEmail + " 존재하지 않는 회원입니다."));
-//
-//            selectedUser.setImg(image);
-//
-//        } catch (IOException e) {
-//            throw new AppException(ErrorCode.DATABASE_ERROR, "사진 저장에 실패했습니다");
-//        }
-//
-//        return "success";
-//    }
-//
-//
-//    /*
-//    파일 업로드 관련 메서드
-//     */
-//    private String uploadPic(MultipartFile file) throws IOException {
-//        Path uploadPath = Paths.get(uploadDir);
-//        if (!Files.isDirectory(uploadPath)) {
-//            Files.createDirectories(uploadPath);
-//        }
-//
-//        UUID uuid = UUID.randomUUID(); // 중복 방지를 위한 랜덤 값
-//        String originFileName = file.getOriginalFilename(); //파일 원래 이름
-//        String fullPath = uploadDir + uuid.toString() + "_" + originFileName;
-//        file.transferTo(new File(fullPath));
-//
-//        return fullPath;
-//    }
 
-
+    @Override
+    public Page<AlarmReponse> getAlarmList(Long userId, Pageable pageable) {
+        return alarmRepository.findAllByUserUserId(userId, pageable).map(AlarmReponse::fromEntity);
+    }
 }

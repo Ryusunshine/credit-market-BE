@@ -1,6 +1,6 @@
 package com.example.creditmarket.dto.request;
 
-import com.example.creditmarket.entity.EntityUser;
+import com.example.creditmarket.domain.entity.EntityUser;
 import lombok.*;
 
 @Setter

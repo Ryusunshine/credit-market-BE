@@ -1,7 +1,7 @@
 package com.example.creditmarket.openAPI;
 
 
-import com.example.creditmarket.entity.EntityFProduct;
+import com.example.creditmarket.domain.entity.EntityFProduct;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

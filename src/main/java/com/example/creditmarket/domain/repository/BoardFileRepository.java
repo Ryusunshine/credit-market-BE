@@ -1,7 +1,7 @@
-package com.example.creditmarket.repository;
+package com.example.creditmarket.domain.repository;
 
-import com.example.creditmarket.entity.EntityBoard;
-import com.example.creditmarket.entity.EntityBoardFile;
+import com.example.creditmarket.domain.entity.EntityBoard;
+import com.example.creditmarket.domain.entity.EntityBoardFile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

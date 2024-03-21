@@ -1,18 +1,18 @@
 package com.example.creditmarket.service.Impl;
 
+import com.example.creditmarket.common.AppException;
+import com.example.creditmarket.common.ErrorCode;
+import com.example.creditmarket.domain.entity.EntityFavorite;
+import com.example.creditmarket.domain.entity.EntityOrder;
+import com.example.creditmarket.domain.entity.EntityUser;
+import com.example.creditmarket.domain.repository.FavoriteRepository;
+import com.example.creditmarket.domain.repository.OptionRepository;
+import com.example.creditmarket.domain.repository.OrderRepository;
+import com.example.creditmarket.domain.repository.UserRepository;
 import com.example.creditmarket.dto.response.FavoriteListResponseDTO;
 import com.example.creditmarket.dto.response.FavoriteResponseDTO;
 import com.example.creditmarket.dto.response.OrderListResponseDTO;
 import com.example.creditmarket.dto.response.OrderResponseDTO;
-import com.example.creditmarket.entity.EntityFavorite;
-import com.example.creditmarket.entity.EntityOrder;
-import com.example.creditmarket.entity.EntityUser;
-import com.example.creditmarket.exception.AppException;
-import com.example.creditmarket.exception.ErrorCode;
-import com.example.creditmarket.repository.FavoriteRepository;
-import com.example.creditmarket.repository.OptionRepository;
-import com.example.creditmarket.repository.OrderRepository;
-import com.example.creditmarket.repository.UserRepository;
 import com.example.creditmarket.service.MyPageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;

@@ -1,4 +1,4 @@
-package com.example.creditmarket.entity;
+package com.example.creditmarket.domain.entity;
 
 
 import lombok.AllArgsConstructor;

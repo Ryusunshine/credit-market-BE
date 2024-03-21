@@ -1,6 +1,6 @@
-package com.example.creditmarket.repository;
+package com.example.creditmarket.domain.repository;
 
-import com.example.creditmarket.entity.EntityFProduct;
+import com.example.creditmarket.domain.entity.EntityFProduct;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -1,13 +1,12 @@
 package com.example.creditmarket.service.Impl;
 
-import com.example.creditmarket.cache.SearchRedisTemplateService;
+import com.example.creditmarket.common.AppException;
+import com.example.creditmarket.common.ErrorCode;
+import com.example.creditmarket.domain.entity.*;
+import com.example.creditmarket.domain.repository.*;
 import com.example.creditmarket.dto.request.OrderSaveRequestDTO;
 import com.example.creditmarket.dto.response.ProductDetailResponseDTO;
 import com.example.creditmarket.dto.response.RecommendResponseDTO;
-import com.example.creditmarket.entity.*;
-import com.example.creditmarket.exception.AppException;
-import com.example.creditmarket.exception.ErrorCode;
-import com.example.creditmarket.repository.*;
 import com.example.creditmarket.service.ProductService;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,7 @@
-package com.example.creditmarket.repository;
+package com.example.creditmarket.domain.repository;
 
-import com.example.creditmarket.entity.EntityOption;
-import com.example.creditmarket.entity.EntityUser;
+import com.example.creditmarket.domain.entity.EntityOption;
+import com.example.creditmarket.domain.entity.EntityUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

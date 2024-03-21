@@ -1,4 +1,4 @@
-package com.example.creditmarket.exception;
+package com.example.creditmarket.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,11 +1,11 @@
 package com.example.creditmarket.service.Impl;
 
 
-import com.example.creditmarket.entity.EntityBoard;
-import com.example.creditmarket.entity.EntityBoardFile;
-import com.example.creditmarket.exception.AppException;
-import com.example.creditmarket.exception.ErrorCode;
-import com.example.creditmarket.repository.BoardFileRepository;
+import com.example.creditmarket.common.AppException;
+import com.example.creditmarket.common.ErrorCode;
+import com.example.creditmarket.domain.entity.EntityBoard;
+import com.example.creditmarket.domain.entity.EntityBoardFile;
+import com.example.creditmarket.domain.repository.BoardFileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;

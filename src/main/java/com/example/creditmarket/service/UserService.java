@@ -1,11 +1,12 @@
 package com.example.creditmarket.service;
 
+import com.example.creditmarket.domain.entity.EntityUser;
 import com.example.creditmarket.dto.request.UserSignUpRequestDTO;
+import com.example.creditmarket.dto.response.AlarmReponse;
 import com.example.creditmarket.dto.response.LoginResponseDTO;
 import com.example.creditmarket.dto.response.UserInfoResponseDTO;
-import com.example.creditmarket.entity.EntityUser;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,4 +26,5 @@ public interface UserService {
 
     EntityUser getUserInfo(HttpServletRequest request);
 
+    Page<AlarmReponse> getAlarmList(Long userId, Pageable pageable);
 }

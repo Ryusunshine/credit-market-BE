@@ -1,18 +1,16 @@
 package com.example.creditmarket.controller;
 
+import com.example.creditmarket.domain.entity.EntityUser;
 import com.example.creditmarket.dto.request.UserLoginRequestDTO;
 import com.example.creditmarket.dto.request.UserSignUpRequestDTO;
 import com.example.creditmarket.dto.response.LoginResponseDTO;
 import com.example.creditmarket.dto.response.UserInfoResponseDTO;
-import com.example.creditmarket.entity.EntityUser;
 import com.example.creditmarket.service.Impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -58,12 +56,5 @@ public class UserController {
         userService.infoUpdate(request.toEntity());
         return ResponseEntity.ok().body("INFO_UPDATE_SUCCESS");
     }
-
-    @GetMapping("info")
-    public ResponseEntity<EntityUser> getUserInfo(HttpServletRequest request) {
-        EntityUser user = userService.getUserInfo(request);
-        return ResponseEntity.ok().body(user);
-    }
-
 
 }

@@ -1,6 +1,6 @@
 package com.example.creditmarket.dto.request;
 
-import com.example.creditmarket.entity.EntityCart;
+import com.example.creditmarket.domain.entity.EntityCart;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

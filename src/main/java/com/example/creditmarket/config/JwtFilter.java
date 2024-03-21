@@ -1,7 +1,7 @@
 package com.example.creditmarket.config;
 
+import com.example.creditmarket.common.JwtUtil;
 import com.example.creditmarket.service.Impl.UserServiceImpl;
-import com.example.creditmarket.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -25,16 +25,22 @@ public class JwtFilter extends OncePerRequestFilter {
     private final UserServiceImpl userServiceImpl;
     private final String secretKey;
 
+    private final static List<String> TOKEN_IN_PARAM_URLS = List.of("/user/alarm/subscribe");
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
+        final String token;
         final String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
         log.info("authorization : {}", authorization);
-
-        if(authorization == null || !authorization.startsWith("Bearer")){
+        if (TOKEN_IN_PARAM_URLS.contains(request.getRequestURI())) {
+            log.info("Request with {} check the query param", request.getRequestURI());
+            token = request.getQueryString().split("=")[1].trim();
+        } else if(authorization == null || !authorization.startsWith("Bearer")){
             log.error("authorization is null or not Bearer");
             filterChain.doFilter(request, response);
             return;
+        } else {
+            token = authorization.split(" ")[1].trim();
         }
 
         if (authorization.split(" ").length != 2) {
@@ -42,9 +48,6 @@ public class JwtFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-
-        // Token 꺼내기
-        String token = authorization.split(" ")[1].trim();
 
 
         // 토큰 유효성 검사
